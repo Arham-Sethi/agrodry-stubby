@@ -1,0 +1,102 @@
+[
+  {
+    "path": ".gitattributes",
+    "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992",
+    "bytes": 9
+  },
+  {
+    "path": "IMPORT-INVENTORY.md",
+    "sha256": "9f795c051421353d3edb88f1b068b48c95bf4be27f02d57612002cc7cac55353",
+    "bytes": 417
+  },
+  {
+    "path": "README.md",
+    "sha256": "e7aedb9190b2aa8b54056767be40d0ae0916b369edcc7c6ce110b2fa4945de52",
+    "bytes": 3178
+  },
+  {
+    "path": "source-manifest.json",
+    "sha256": "4b9f5b60d7fe86858b19d056193b9e3ed6eb241e5714238869319f50911b91a8",
+    "bytes": 5931
+  },
+  {
+    "path": "desktop/AI Moisture Detection/afsccnn/afscpremoistnettrain.py",
+    "sha256": "aac586e4d3ef25175811819fc99924b76070bf5e427e46ab070d31e11f02349f",
+    "bytes": 21974
+  },
+  {
+    "path": "desktop/AI Moisture Detection/afsccnn/afsc_cinematic.py",
+    "sha256": "2fc571b649f412ef2e8fdc9600b543e2e8c0143d113b294d90307c6bc0e8325d",
+    "bytes": 26870
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/app.py",
+    "sha256": "01de0c50ae9e0ef384c104b93841d4dc7f5defe1e50957a481b20c0754b719fa",
+    "bytes": 2669
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/model.py",
+    "sha256": "d2fa6153eb0238dfc248ee9870e38b10a10f192b7e3e9c48b07847ba66a2be39",
+    "bytes": 5624
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/README.md",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/requirments.txt",
+    "sha256": "af8b175f7b927d5be9d1c4e8a32a6da292ff3d25f1627457e83aaabfacc82907",
+    "bytes": 433
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/schemas.py",
+    "sha256": "684c6a739878a50a717488f92a444a83243e71a0a3bb5687f95a10280befc04b",
+    "bytes": 455
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Backend/utils.py",
+    "sha256": "243fef36ba8c12a58406c08a38cef252593f469f776a8b3aceabfb7e6c79995f",
+    "bytes": 753
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Data/cleaning.py",
+    "sha256": "524d84f1722c58dd6081c79313c46442f9ba5ffefd067e9d5627ba5a0d18727b",
+    "bytes": 640
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Data/csv1.py",
+    "sha256": "fb49b19926f0538c55eb9c732707fa7c6deede9d85a2d08ef8668e5384c76d6b",
+    "bytes": 2371
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Data/mainapp1.py",
+    "sha256": "bd462e925c8214144a6080a357bcbc722912691bf457187794c7bae818ac8158",
+    "bytes": 1048
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Data/splitdata.py",
+    "sha256": "9f2c1f25f9f403ed107e9835467c2844d5be4148dae690af03945cbc1e04f671",
+    "bytes": 783
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Draft1/posttrainft.py",
+    "sha256": "f85a04424c8a58649cb0c10d2d6e671015201e244ec0a1506db7980c6e3c9984",
+    "bytes": 3104
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Draft1/train_pretrain.py",
+    "sha256": "c2f92b7ff9ddb80ee2aeed93f6bf01e4537d07632bd9df18cfdcfcbe0eb1af59",
+    "bytes": 9882
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Frontend/AgroDry_frontend.html",
+    "sha256": "5bfb9d0ce67e392318bb1b5be2dec74ed6176cd6e5bd84511ea76ec5ab362bbd",
+    "bytes": 21103
+  },
+  {
+    "path": "desktop/AI Moisture Detection/Frontend/index.html",
+    "sha256": "359037e48a55860349eba7c99fc581f4210bf8b5ba6f2dbee00506fdbabad91f",
+    "bytes": 7238
+  }
+]

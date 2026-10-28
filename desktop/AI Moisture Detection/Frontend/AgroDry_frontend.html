@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AgroDry – QFM-CNN Moisture & Grading</title>
+    <style>
+        :root {
+            --bg: #090d12;
+            --card: #0f1621;
+            --text: #e6edf3;
+            --muted: #9fb0c3;
+            --accent: #22d3ee;
+            --accent2: #6ee7b7;
+            --warn: #f59e0b;
+            --err: #f87171;
+            --btn: #1f2937;
+            --border: #223046
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(1200px 800px at 20% -20%, #0e1a2b 0%, #090d12 45%, #070a0f 100%);
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial
+        }
+
+        header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        header h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: .2px
+        }
+
+        header .sub {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .brand svg {
+            filter: drop-shadow(0 0 6px rgba(34, 211, 238, .35))
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 16px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 18px
+        }
+
+        .card {
+            background: linear-gradient(180deg, #0f1621, #0b111a);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px
+        }
+
+        .card h2 {
+            margin: 0 0 10px 0;
+            font-size: 16px
+        }
+
+        .sectionTitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px
+        }
+
+        .sectionTitle .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            box-shadow: 0 0 10px rgba(110, 231, 183, .6)
+        }
+
+        .dropzone {
+            border: 2px dashed #2a3a55;
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .dropzone.drag {
+            border-color: #7aa2f7;
+            background: #0d1420
+        }
+
+        .thumb {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: #0a0f16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .thumb img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        button {
+            background: var(--btn);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer
+        }
+
+        button.primary {
+            background: #1d4ed8;
+            border-color: #1d4ed8
+        }
+
+        button.ghost {
+            background: transparent
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #0f1520;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .ok {
+            color: var(--accent2)
+        }
+
+        .warn {
+            color: var(--warn)
+        }
+
+        .err {
+            color: var(--err)
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .kv {
+            background: #0d131c;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px
+        }
+
+        .kv .label {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .kv .value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 6px
+        }
+
+        .progress {
+            height: 10px;
+            background: #0f1725;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #22d3ee, #6ee7b7)
+        }
+
+        .mediaGrid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px
+        }
+
+        .videoShell {
+            background: #0a0f16;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px
+        }
+
+        video {
+            width: 100%;
+            max-height: 360px;
+            background: #000;
+            border-radius: 8px
+        }
+
+        footer {
+            opacity: .75;
+            text-align: center;
+            padding: 18px;
+            color: var(--muted)
+        }
+
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .results {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3l7.794 4.5v9L12 21l-7.794-4.5v-9L12 3z" stroke="#6ee7b7" stroke-width="1.5" />
+                <path d="M7.8 11.8l3.6 2.2L18 9.6" stroke="#22d3ee" stroke-width="1.6" />
+            </svg>
+            <h1>AgroDry</h1>
+            <span class="sub">QFM-CNN powered moisture & grading</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- LEFT: Image flow & results -->
+            <section class="card">
+                <div class="sectionTitle"><span class="dot"></span>
+                    <h2>Analyze Parali Photo</h2>
+                </div>
+                <div id="drop" class="dropzone">
+                    <div class="thumb" id="thumb"><span class="hint">Drag & drop an image here or click to choose</span>
+                    </div>
+                    <input id="file" type="file" accept="image/*" style="display:none" />
+                    <div class="row">
+                        <button id="chooseBtn">Choose Photo</button>
+                        <button id="predictBtn" class="primary">Predict</button>
+                        <button id="clearBtn" class="ghost">Clear</button>
+                        <span class="pill"
+                            title="If your backend isn't running, we'll generate a believable example.">Mock mode:
+                            <strong id="mockState">ON</strong></span>
+                    </div>
+                    <div class="hint">Tip: fill the frame with the stubble, steady hands, good light. A 15 cm scale
+                        in-frame helps particle size later.</div>
+                </div>
+
+                <div class="sectionTitle" style="margin-top:18px"><span class="dot"></span>
+                    <h2>Results</h2>
+                </div>
+                <div class="results" id="results">
+                    <div class="kv">
+                        <div class="label">Moisture</div>
+                        <div class="value"><span id="moistVal">–</span></div>
+                        <div class="progress">
+                            <div id="moistBar" class="bar" style="width:0%"></div>
+                        </div>
+                        <div class="hint">Confidence: <span id="moistConf">–</span></div>
+                    </div>
+                    <div class="kv">
+                        <div class="label">Crop Type (not predicted)</div>
+                        <div class="value" id="cropVal">—</div>
+                        <div class="hint">Manual/assumed; model does not predict crop.</div>
+                    </div>
+                    <div class="kv">
+                        <div class="label">Particle Size</div>
+                        <div class="value" id="psizeVal">coming soon</div>
+                        <div class="hint">This head will be added later.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT: QFM animation + photo quality + logs -->
+            <aside class="card">
+                <div class="mediaGrid">
+                    <div>
+                        <div class="sectionTitle"><span class="dot"></span>
+                            <h2>QFM-CNN Animation (Manim)</h2>
+                        </div>
+                        <div class="videoShell" id="videoZone">
+                            <video id="demoVideo" controls preload="metadata">
+                                <source id="videoSource" src="" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="row" style="margin-top:10px">
+                                <input id="videoFile" type="file" accept="video/mp4,video/webm,video/ogg"
+                                    style="display:none" />
+                                <button id="videoChoose">Choose Video</button>
+                                <button id="videoClear" class="ghost">Clear</button>
+                                <span class="hint">Pick your Manim-rendered animation from Desktop; we'll preview it
+                                    here.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="sectionTitle" style="margin-top:10px"><span class="dot"></span>
+                            <h2>Photo Quality</h2>
+                        </div>
+                        <div class="row" style="margin-bottom:10px">
+                            <span class="pill" id="lightBadge">Light: <span>–</span></span>
+                            <span class="pill" id="sharpBadge">Sharpness: <span>–</span></span>
+                        </div>
+                        <div class="hint" id="notes">Upload a photo to analyze brightness and blur.</div>
+                        <hr style="border:0;border-top:1px solid var(--border);margin:14px 0">
+                        <h2 class="sectionTitle"><span class="dot"></span><span>Logs</span></h2>
+                        <pre id="log"
+                            style="background:#0a0f16;border:1px solid var(--border);border-radius:12px;padding:10px;height:180px;overflow:auto;color:#bcd">Ready.</pre>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer>
+        AgroDry • Built for Young Scientist India • QFM-CNN by Arham Sethi
+    </footer>
+
+    <script>
+        // ====== Config ======
+        const API_URL = 'http://127.0.0.1:8000/predict'; // backend endpoint (FastAPI later)
+
+        // ====== State ======
+        let currentFile = null; let mockMode = true; // until backend responds
+
+        // ====== Elements ======
+        const drop = document.getElementById('drop');
+        const fileInput = document.getElementById('file');
+        const thumb = document.getElementById('thumb');
+        const chooseBtn = document.getElementById('chooseBtn');
+        const predictBtn = document.getElementById('predictBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const mockState = document.getElementById('mockState');
+        const moistVal = document.getElementById('moistVal');
+        const moistBar = document.getElementById('moistBar');
+        const moistConf = document.getElementById('moistConf');
+        const cropVal = document.getElementById('cropVal');
+        const psizeVal = document.getElementById('psizeVal');
+        const logEl = document.getElementById('log');
+        const lightBadge = document.getElementById('lightBadge');
+        const sharpBadge = document.getElementById('sharpBadge');
+        const notes = document.getElementById('notes');
+
+        // Video elements
+        const videoInput = document.getElementById('videoFile');
+        const videoChoose = document.getElementById('videoChoose');
+        const videoClear = document.getElementById('videoClear');
+        const demoVideo = document.getElementById('demoVideo');
+        const videoSource = document.getElementById('videoSource');
+
+        function log(msg) { logEl.textContent += "\n" + msg; logEl.scrollTop = logEl.scrollHeight; }
+
+        // ====== Image File handling ======
+        chooseBtn.onclick = () => fileInput.click();
+        clearBtn.onclick = () => { currentFile = null; thumb.innerHTML = '<span class="hint">Drag & drop an image here or click to choose</span>'; resetResults(); };
+        drop.addEventListener('click', () => fileInput.click());
+        drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
+        drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+        drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('drag'); if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+        function handleFile(f) {
+            if (!f.type.startsWith('image/')) { alert('Please choose an image file'); return; }
+            currentFile = f; log(`Picked file: ${f.name}`);
+            const img = document.createElement('img');
+            img.onload = () => { analyzeQuality(img); };
+            img.src = URL.createObjectURL(f);
+            thumb.innerHTML = ''; thumb.appendChild(img);
+        }
+
+        // ====== Video handling (local preview) ======
+        videoChoose.onclick = () => videoInput.click();
+        videoClear.onclick = () => { videoSource.src = ''; demoVideo.load(); };
+        videoInput.addEventListener('change', e => {
+            const f = e.target.files[0]; if (!f) { return; }
+            const url = URL.createObjectURL(f);
+            videoSource.src = url; demoVideo.load(); demoVideo.play().catch(() => { });
+            log(`Loaded video: ${f.name}`);
+        });
+
+        // ====== Quality checks (simple) ======
+        function analyzeQuality(img) {
+            const c = document.createElement('canvas');
+            const ctx = c.getContext('2d');
+            c.width = 256; c.height = Math.round(256 * (img.naturalHeight / img.naturalWidth));
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            const data = ctx.getImageData(0, 0, c.width, c.height).data;
+
+            let sum = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                sum += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+            }
+            const mean = sum / (data.length / 4) / 255;
+
+            const g = grayscale(ctx.getImageData(0, 0, c.width, c.height));
+            const varLap = varianceOfLaplacian(g, c.width, c.height);
+
+            const lightOK = mean > 0.22;
+            const sharpOK = varLap > 50;
+
+            badge(lightBadge, lightOK ? 'ok' : 'warn', `Light: ${lightOK ? 'OK' : 'Low'}`);
+            badge(sharpBadge, sharpOK ? 'ok' : 'warn', `Sharp: ${sharpOK ? 'OK' : 'Blur'}`);
+            notes.textContent = `Brightness ${(mean * 100).toFixed(0)}%, Sharpness ${varLap.toFixed(0)}`;
+        }
+        function grayscale(imgData) {
+            const { data, width, height } = imgData;
+            const out = new Float32Array(width * height);
+            for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+                out[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+            }
+            return { arr: out, width, height };
+        }
+        function varianceOfLaplacian(g, w, h) {
+            const k = [0, 1, 0, 1, -4, 1, 0, 1, 0];
+            const f = new Float32Array(w * h); let m = 0;
+            for (let y = 1; y < h - 1; y++) {
+                for (let x = 1; x < w - 1; x++) {
+                    let s = 0, idx = y * w + x;
+                    s += k[0] * g.arr[(y - 1) * w + (x - 1)];
+                    s += k[1] * g.arr[(y - 1) * w + (x)];
+                    s += k[2] * g.arr[(y - 1) * w + (x + 1)];
+                    s += k[3] * g.arr[(y) * w + (x - 1)];
+                    s += k[4] * g.arr[(y) * w + (x)];
+                    s += k[5] * g.arr[(y) * w + (x + 1)];
+                    s += k[6] * g.arr[(y + 1) * w + (x - 1)];
+                    s += k[7] * g.arr[(y + 1) * w + (x)];
+                    s += k[8] * g.arr[(y + 1) * w + (x + 1)];
+                    f[idx] = s; m += s;
+                }
+            }
+            m /= (w * h); let v = 0;
+            for (let i = 0; i < f.length; i++) { const d = f[i] - m; v += d * d; }
+            return v / (w * h);
+        }
+        function badge(el, type, text) { el.className = 'pill ' + (type === 'ok' ? 'ok' : (type === 'warn' ? 'warn' : 'err')); el.querySelector('span').textContent = text; }
+
+        // ====== Predict ======
+        predictBtn.onclick = async () => {
+            if (!currentFile) { alert('Choose a photo first'); return; }
+            setLoading(true);
+            let resJson = null, usedMock = false;
+            try {
+                const fd = new FormData();
+                fd.append('file', currentFile);
+                const t0 = performance.now();
+                const res = await fetch(API_URL, { method: 'POST', body: fd });
+                if (!res.ok) throw new Error('Backend not ready');
+                resJson = await res.json();
+                resJson.latency_ms = Math.round(performance.now() - t0);
+                mockMode = false; mockState.textContent = 'OFF';
+            } catch (e) {
+                usedMock = true; mockMode = true; mockState.textContent = 'ON';
+                resJson = mockPredict();
+            }
+            renderResults(resJson, usedMock);
+            setLoading(false);
+        };
+
+        function renderResults(r, mocked) {
+            const m = r.moisture?.value_pct ?? (20 + Math.random() * 20);
+            moistVal.textContent = `${m.toFixed(1)}%`;
+            moistBar.style.width = Math.min(100, Math.max(0, m)) + '%';
+            moistConf.textContent = r.moisture?.confidence ? Math.round(r.moisture.confidence * 100) + '%' : (mocked ? '(mock)' : '–');
+
+            // Do NOT read crop or particle size from backend:
+            // Keep cropVal as is (manual/assumed) and psizeVal "coming soon".
+            // cropVal.textContent = '—'; // (left intact)
+            // psizeVal.textContent = 'coming soon'; // already set
+
+            log((mocked ? '[MOCK] ' : '') + JSON.stringify(r, null, 2));
+        }
+
+        function mockPredict() {
+            const base = 24 + (Math.random() * 6 - 3);
+            return {
+                moisture: { value_pct: Math.max(2, Math.min(60, base)), confidence: 0.9 },
+                quality: { lighting_ok: true, sharpness_ok: true, notes: [] },
+                model: { version: 'mock-1', backend: 'stub' },
+                latency_ms: Math.round(40 + Math.random() * 30)
+            };
+        }
+
+        function resetResults() {
+            moistVal.textContent = '–';
+            moistBar.style.width = '0%';
+            moistConf.textContent = '–';
+            cropVal.textContent = '—';
+            psizeVal.textContent = 'coming soon';
+        }
+        function setLoading(on) { predictBtn.disabled = on; predictBtn.textContent = on ? 'Predicting…' : 'Predict'; }
+
+        // ====== Boot ======
+        log('AgroDry UI ready. If backend is not running, mock mode will simulate predictions.');
+    </script>
+</body>
+
+</html>
